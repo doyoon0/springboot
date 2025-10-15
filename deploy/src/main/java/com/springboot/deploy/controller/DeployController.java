@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class DeployController {
+
+    @GetMapping("/restLogin")
+    public String restLogin() { return "restLogin"; }
+
+    @GetMapping("/restSignup")
+    public String restSignup() { return "restSignup"; }
+
     @GetMapping("/login")
     public String login() {
         return "login";
