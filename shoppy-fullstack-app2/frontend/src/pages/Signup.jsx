@@ -1,8 +1,11 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { validateSignupFormCheck } from '../utils/validate.js';
 import { initForm } from '../utils/init.js';
+import { axiosPost } from '../utils/dataFetch.js';
 
 export function Signup() { 
+    const navigate = useNavigate();
     const initArray = ['id', 'pwd', 'cpwd', 'name', 'phone', 'emailName', 'emailDomain'];
     // const initForm = initArray.reduce((acc,cur) => {  //비동기
     //         acc[cur] = "";
@@ -29,20 +32,38 @@ export function Signup() {
         setForm(initForm(initArray));       
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const param = {  refs: refs,   setErrors: setErrors }
+
         if(validateSignupFormCheck(param)) {
-            console.log("submit-->", form);            
+            /**
+             * 스프링부트 연동 - Post, /member/signup 
+            */
+           const url = "http://localhost:8080/member/signup";
+           const formData = { ...form, email: form.emailName.concat('@', form.emailDomain)} 
+           const result = await axiosPost(url, formData);
+           if(result) {
+                alert("회원가입에 성공하셨습니다.");
+                navigate("/");
+           } else {
+                alert("회원가입에 실패하셨습니다.");
+           }       
         }
     }    
+
+    const handleDuplicateIdCheck = async () => {
+        const url = "http://localhost:8080/member/idcheck";
+        const data = { "id": form.id };
+        const result = await axiosPost(url, data);
+        alert(result);
+    }
 
     return (
     <div className="content">
         
         <div className="join-form center-layout">
             <h1 className="center-title">회원가입(React)</h1>
-            <form onSubmit={handleSubmit}>
                 <ul>
                     <li>
                         <label for="" ><b>아이디</b></label>
@@ -55,6 +76,7 @@ export function Signup() {
                                     onChange={handleChangeForm}               
                                     placeholder = "아이디 입력(6~20자)" />
                             <button type="button" 
+                                    onClick={handleDuplicateIdCheck}
                                   > 중복확인</button>
                             <input type="hidden" id="idCheckResult" value="default" />
                         </div>
@@ -127,12 +149,11 @@ export function Signup() {
                         </div>
                     </li>
                     <li>
-                        <button type="submit">가입하기</button>
+                        <button type="submit" onClick={handleSubmit}>가입하기</button>
                         <button type="reset"
                                 onClick={handleResetForm}>다시쓰기</button>
                     </li>
                 </ul>
-            </form>
         </div>
     </div>
     );
