@@ -28,4 +28,5 @@ export function validateSignupFormCheck({refs, setErrors}) {
         refs.emailDomainRef.current.focus();
         return false;
     }
+    return true;
 }

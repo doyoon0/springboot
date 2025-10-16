@@ -27,4 +27,14 @@ public class MemberController {
 
         return result;
     }
+
+    @PostMapping("/idcheck")
+    public String IdCheck(@RequestBody Member member) {
+        boolean result = false; //아이디 존재O: 1, 존재X: 0
+        String msg = "";
+        if(result) msg = "이미 사용중인 아이디 입니다.";
+        else msg = "사용이 가능한 아이디 입니다.";
+
+        return msg;
+    }
 }

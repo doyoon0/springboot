@@ -53,7 +53,14 @@ export function Signup() {
                 alert("회원가입에 실패하셨습니다.");
             }
         }
-    }    
+    }
+
+    const handleDuplicateIdCheck = async () => {
+        const url = "http://localhost:8080/member/idcheck";
+        const data = { "id": form.id }; //axiosPost에서 json으로 보내기로 약속
+        const result = await axiosPost(url, data);
+        alert(result);
+    }
 
     return (
     <div className="content">
@@ -72,7 +79,8 @@ export function Signup() {
                                     ref={refs.idRef} 
                                     onChange={handleChangeForm}               
                                     placeholder = "아이디 입력(6~20자)" />
-                            <button type="button" 
+                            <button type="button"
+                                    onClick={handleDuplicateIdCheck}
                                   > 중복확인</button>
                             <input type="hidden" id="idCheckResult" value="default" />
                         </div>

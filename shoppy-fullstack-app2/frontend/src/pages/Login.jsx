@@ -25,34 +25,7 @@ export function Login() {
         setErrors({ id: '', pwd: '' });
     }
 
-    // const validateFormCheck = () => {
-    //     if(idRef.current.value === "") {
-    //         setErrors({...errors, id: "아이디를 입력해주세요"});
-    //         idRef.current.focus();
-    //         return false;
-    //     } else if(pwdRef.current.value === "") {
-    //         setErrors({...errors, pwd: "패스워드를 입력해주세요"});
-    //         pwdRef.current.focus();
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
-    // if (validateFormCheck(param)) {
-    //     // console.log('서버전송 ---> ', formData);  
-    //     const did = "test";
-    //     const dpwd = "1234";
-    //     if (did === formData.id && dpwd === formData.pwd) {
-    //         alert("로그인에 성공하셨습니다.");
-    //         handleLogin(formData.id);
-    //         navigate("/");
-    //     } else {
-    //         alert("로그인에 실패, 확인후 다시 진행해주세요.");
-    //         idRef.current.focus();
-    //     }
-    // }
-    
-    const handleLoginSubmit = (e) => {
+    const handleLoginSubmit = async (e) => {
         e.preventDefault();
         const param = {
             idRef: idRef,
@@ -61,13 +34,14 @@ export function Login() {
             errors: errors
         }
 
-        const succ = dispatch(getLogin(formData, param)); //비동기식 처리 후 isLogin 변경
+        const succ = await dispatch(getLogin(formData, param)); //비동기식 처리 후 isLogin 변경
         // console.log('isLogin2 -->' , isLogin); //동기식 처리 -> false
         if (succ) {
             alert("로그인에 성공하셨습니다.");
             navigate("/");
         } else {
             alert("로그인에 실패, 확인후 다시 진행해주세요.");
+            setFormData({ id: '', pwd: '' });
             idRef.current.focus();
         }
     }
