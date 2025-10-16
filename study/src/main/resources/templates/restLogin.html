@@ -13,7 +13,7 @@
 
             //2. PostMapping으로 MemberRestController에 JSON 객체 전송
             //   --> await fetch 함수 요청(request) 및 응답(response) 생성
-            const response = await fetch("/restLogin", { //react에서는 http://localhost:8008/restLogin 풀경로로 줘야함 3000번대라.
+            const response = await fetch("/member/restLogin", { //react에서는 http://localhost:8008/member/restLogin 풀경로로 줘야함 3000번대라.
                 method: "POST",
                 headers: {"Content-Type": "application/json", }, //JSON으로 보낼거라는 소식
                 body: JSON.stringify(formData), //전송 데이터
