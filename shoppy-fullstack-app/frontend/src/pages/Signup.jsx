@@ -3,8 +3,11 @@ import { validateSignupFormCheck } from '../utils/validate.js';
 import { initForm } from '../utils/init.js';
 import { axiosPost } from '../utils/dataFetch.js';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getSignup, getIdCheck } from '../feature/auth/authAPI.js';
 
 export function Signup() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const initArray = ['id', 'pwd', 'cpwd', 'name', 'phone', 'emailName', 'emailDomain'];
@@ -36,29 +39,18 @@ export function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const param = {  refs: refs,   setErrors: setErrors }
-        if(validateSignupFormCheck(param)) {
-            /**
-                스프링부트 연동 - Post, /member/signup
-            */
-            const url = "http://localhost:8080/member/signup";
-            const formData = { ...form, email: form.emailName.concat('@', form.emailDomain)}
-
-            console.log('FormData ====> ', formData);
-
-            const result = await axiosPost(url, formData);
-            if(result) {
-                alert("회원가입에 성공하셨습니다.");
-                navigate("/");
-            } else {
-                alert("회원가입에 실패하셨습니다.");
-            }
+        const formData = { ...form, email: form.emailName.concat('@', form.emailDomain)}
+        const result = await dispatch(getSignup(formData, param));
+        if(result) {
+            alert("회원가입에 성공하셨습니다.");
+            navigate("/");
+        } else {
+            alert("회원가입에 실패하셨습니다.");
         }
-    }
+    }//handleSubmit
 
     const handleDuplicateIdCheck = async () => {
-        const url = "http://localhost:8080/member/idcheck";
-        const data = { "id": form.id }; //axiosPost에서 json으로 보내기로 약속
-        const result = await axiosPost(url, data);
+        const result = await dispatch(getIdCheck(form.id));
         alert(result);
     }
 
