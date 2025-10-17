@@ -36,4 +36,11 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
         return count;
     }
 
+    @Override
+    public Long findByIdnPwd(Member member) {
+        String sql = "select count(*) from member where id = ? and pwd = ?";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, member.getId(), member.getPwd());
+        return count;
+    }
+
 }

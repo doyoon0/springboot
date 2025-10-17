@@ -34,8 +34,12 @@ public class MemberController {
     @PostMapping("/login")
     public boolean Login(@RequestBody Member member) {
         boolean result = false;
-        if(member.getId().equals("test") && member.getPwd().equals("1234"))
-            result = true;
+
+//        if(member.getId().equals("test") && member.getPwd().equals("1234"))
+//            result = true;
+
+        boolean loginConfirm = memberService.login(member);
+        if(loginConfirm) result = true;
 
         return result;
     }

@@ -28,4 +28,16 @@ public class MemberServiceImpl implements MemberService{
 
         return result;
     }
+
+    @Override
+    public boolean login(Member member) {
+        boolean result = true;
+        Long count = memberRepository.findByIdnPwd(member);
+
+        System.out.println("lets goooo======>" + member.getId() +", " + member.getPwd());
+
+        if(count == 0) result = false;
+
+        return result;
+    }
 }
