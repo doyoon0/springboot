@@ -31,6 +31,10 @@ dependencies {
     //JDBC-jdbcTemplate
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     runtimeOnly 'mysql:mysql-connector-java:8.0.31'
+
+    //spring security
+//    implementation 'org.springframework.security:spring-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security' //legacy
 }
 
 tasks.named('test') {

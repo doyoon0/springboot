@@ -6,7 +6,7 @@ import { axiosPost } from '../../utils/dataFetch.js';
     Id 중복 체크
 */
 export const getIdCheck = (id) => async(dispatch) => {
-    const url = "http://localhost:8080/member/idcheck";
+    const url = "/member/idcheck";
     const data = { "id": id }; //axiosPost에서 json으로 보내기로 약속
     const result = await axiosPost(url, data);
     return result;
@@ -18,7 +18,7 @@ export const getIdCheck = (id) => async(dispatch) => {
 export const getSignup = (formData, param) => async(dispatch) => {
     let result = null;
     if(validateSignupFormCheck(param)) {
-        const url = "http://localhost:8080/member/signup";
+        const url = "/member/signup";
         result = await axiosPost(url, formData);
     }
     return result;
@@ -34,7 +34,7 @@ export const getLogin = (formData, param) => async(dispatch) => {
             SpringBoot - @RestController, @PostMapping("/member/login")
             axios api
         */
-        const url = "http://localhost:8080/member/login";
+        const url = "/member/login";
         const result = await axiosPost(url, formData);
 
         if(result) {

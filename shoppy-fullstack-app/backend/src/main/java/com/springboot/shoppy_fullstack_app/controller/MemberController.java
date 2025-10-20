@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 // Controller에 Service 주입하는 이유 : 비즈니스 로직을 서비스에서 처리하고, 컨트롤러는 요청/응답만 처리
 @RestController
 @RequestMapping("/member")
-@CrossOrigin(origins = {"http://localhost:3000"})
+//@CrossOrigin(origins = {"http://localhost:3000"})
 public class MemberController {
 
     //서비스 객체 호출
