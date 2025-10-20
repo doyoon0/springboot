@@ -24,4 +24,9 @@ public class ProductServiceImpl implements ProductService{
         List<Product> list = productRepository.findAll();
         return list;
     }
+
+    @Override
+    public Product findById(int pid) {
+        return productRepository.findById(pid);
+    }
 }

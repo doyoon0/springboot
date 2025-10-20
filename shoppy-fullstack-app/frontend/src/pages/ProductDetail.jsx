@@ -18,42 +18,22 @@ export function ProductDetail() {
     const dispatch = useDispatch();
     const { pid } = useParams(); //객체로 이 보따리에 담아주면 구조분해할당으로 풀어본다
     const product = useSelector((state) => state.product.product);
-    const imgList = useSelector((state) => state.product.product.imgList);
+    let imgList = useSelector((state) => state.product.imgList);
 
-
-    // const { addCart } = useCart(); //useCart.js에 선언된 변수랑 이름 맞춰야함
-    // const { filterProduct } = useProduct();
-    // const { product, imgList} = useContext(ProductContext);
-
-    
     const [size, setSize] = useState('XS');
     const tabLabels = ['DETAIL', 'REVIEW', 'Q&A', 'RETURN & DELIVERY'];
     const [tabName, setTabName] = useState('detail');
     const tabEventNames = ['detail', 'review', 'q&a', 'return'];
 
     useEffect(() => {
-        // filterProduct(pid);
         dispatch(getProduct(pid));
     }, []);
-
-    // //쇼핑백 추가하기 ==> 직접 넣어버리기.
-    // const handleAddCartItem = () => {
-    //     // alert("상품이 카트에 추가되었습니다.");
-    //     const cartItem = {
-    //         pid: product.pid,
-    //         size: size,
-    //         qty: 1
-    //     }
-    //     // addCart(cartItem);
-    //    dispatch(addCart(cartItem)); //addaCart 호출 시 dispatch 전송!!
-        
-    // }
 
     return (
         <div className='content'>
             <div className='product-detail-top'>
                 <div className='product-detail-image-top'>
-                    <img src={product.image} />
+                    <img src={`/images/${product.image}`} />
                     <ImageList className='product-detail-image-top-list' imgList={imgList} />
                 </div>
                 <ul className='product-detail-info-top'>

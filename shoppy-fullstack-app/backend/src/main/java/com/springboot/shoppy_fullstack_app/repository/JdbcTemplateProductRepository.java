@@ -26,4 +26,11 @@ public class JdbcTemplateProductRepository implements ProductRepository{
 
         return list;
     }
+
+    @Override
+    public Product findById(int pid) {
+        String sql = "select pid, name, price, info, rate, trim(image) as image, imgList from product where pid = ?";
+        Product product = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Product.class), pid);
+        return product;
+    }
 }
