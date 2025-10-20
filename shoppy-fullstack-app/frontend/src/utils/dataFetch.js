@@ -25,17 +25,8 @@ export const groupByRows = (array, number) => {
 /**
  * axiosPost 함수를 이용하여 백엔드 연동 처리
  */
-export const axiosPost = async (url, formData) => {
-//  방법 1.
-    const response = await axios.post(url, formData, {"Content-Type": "application/json"});
-    console.log(response);
-//    방법 2.
-//    const response = await axios({
-//        method: "POST",
-//        url: url,
-//        headers: { "Content-Type": "application/json"},
-//        data: formData //body 아님 주의!!!
-//    });
+export const axiosPost = async (url) => {
+    const response = await axios.get(url);
 
     return response.data;
 }
