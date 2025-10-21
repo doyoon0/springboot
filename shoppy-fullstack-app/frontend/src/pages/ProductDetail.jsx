@@ -33,7 +33,7 @@ export function ProductDetail() {
         <div className='content'>
             <div className='product-detail-top'>
                 <div className='product-detail-image-top'>
-                    <img src={`/images/${product.image}`} />
+                    <img src={product.image && `/images/${product.image}`} />
                     <ImageList className='product-detail-image-top-list' imgList={imgList} />
                 </div>
                 <ul className='product-detail-info-top'>
@@ -85,7 +85,7 @@ export function ProductDetail() {
                 </ul>
                     {tabName === "detail" && <Detail imgList={imgList} pid={pid} />}
                     {tabName === "review" && <Review />}
-                    {tabName === "q&a" && <QnA />}
+                    {tabName === "q&a" && <QnA pid={pid} />}
                     {tabName === "return" && <Return />}
 
             </div>

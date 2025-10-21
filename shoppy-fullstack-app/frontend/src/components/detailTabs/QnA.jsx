@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
-import { axiosData } from '../../utils/dataFetch.js';
+import { getQna } from '../../feature/product/productAPI.js';
 
-export function QnA() {
+export function QnA({pid}) {
     const [qnaData, setQnaData] = useState([]);
     const [openQid, setOpenQid] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        const fetch = async () => {
-            const jsonData = await axiosData("/data/productQnA.json");
+        const fetch = async (pid) => {
+            const jsonData = await getQna(pid);
             setQnaData(jsonData);
         }
 
-        fetch();
+        fetch(pid);
     }, [])
+
+console.log("qna========> ", qnaData);
 
     const handleToggle = (qid) => {
         setOpenQid(prev => (prev === null) ? qid : null);
@@ -39,7 +41,7 @@ export function QnA() {
                     {qnaData && qnaData.map(item =>
                         <tr>
                             <td style={{ width: "10%", paddingTop: "10px" }}>{item.isComplete ? <span>답변완료</span> : <span>답변준비중</span>}</td>
-                            <td style={{ width: "60%"}}> 
+                            <td style={{ width: "60%"}}>
                                 <span style={{cursor: "pointer"}} onClick={() => {handleToggle(item.qid)}}>{item.title}</span>
                                 {item.isLock && <span>비밀글</span>}
                                 {openQid === item.qid && <span>{item.content}</span>}
