@@ -7,10 +7,9 @@ import { axiosData, groupByRows, axiosGet, axiosPost } from '../../utils/dataFet
 */
 export const getDetailinfo = async(pid) => {
     const url = "/product/detailinfo";
-    const detailinfo = await axiosPost(url, {"pid":pid});
-    console.log("detailinfo =====> ", detailinfo);
-
-    return detailinfo;
+    const info = await axiosPost(url, {"pid":pid});
+    const list = JSON.parse(info.list);
+    return {...info, list: list};
 //    dispatch(filterProduct({ "product": product })); slice로 넘어가는건 아니니까
 }
 

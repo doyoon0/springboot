@@ -1,6 +1,7 @@
 package com.springboot.shoppy_fullstack_app.repository;
 
 import com.springboot.shoppy_fullstack_app.dto.Product;
+import com.springboot.shoppy_fullstack_app.dto.ProductDetailinfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,5 +33,13 @@ public class JdbcTemplateProductRepository implements ProductRepository{
         String sql = "select pid, name, price, info, rate, trim(image) as image, imgList from product where pid = ?";
         Product product = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Product.class), pid);
         return product;
+    }
+
+    @Override
+    public ProductDetailinfo findDetailinfo(int pid) {
+        String sql = "select did, title_en as titleEn, title_ko as titleKo, pid, list" +
+                        " from product_detailinfo where pid = ?";
+        ProductDetailinfo productDetail = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ProductDetailinfo.class), pid);
+        return productDetail;
     }
 }

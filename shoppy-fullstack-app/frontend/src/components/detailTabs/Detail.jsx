@@ -8,6 +8,7 @@ import { getDetailinfo } from '../../feature/product/productAPI.js';
 export function Detail({ imgList, pid }) {
     /* 불러와서 바로 실행해야할 경우 useEffect */
     const [info, setInfo] = useState({});
+
     useEffect(() => {
         const loadData = async(pid) => {
             const jsonData = await getDetailinfo(pid);
@@ -16,11 +17,12 @@ export function Detail({ imgList, pid }) {
         loadData(pid);
     }, []);
 
-    console.log("info ==> ", info);
+    console.log("info ===> ", info);
+
     return (
         <div>
             <DetailImages imgList={imgList} />
-{/*           <DetailInfo info={info} />    */}
+            <DetailInfo info={info} />
         </div>
     );
 }
@@ -45,9 +47,9 @@ export function DetailInfo({ info }) {
     return (
         <div className='detail-info'>
             <h4 className='detail-info-title-top'>
-                {info && info.title_en} / {info && info.title_ko}
+                {info && info.titleEn} / {info && info.titleKo}
                 {
-                    info && info.list.map(item =>
+                    info.list && info.list.map(item =>
                         <div>
                             <h5 className='detail-info-title'>[{item.title}]</h5>
                             {item.title === "SIZE" || item.title === "MODEL SIZE" ?
