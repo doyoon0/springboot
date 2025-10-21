@@ -2,6 +2,18 @@ import React from 'react';
 import { createProduct, filterProduct } from './productSlice.js';
 import { axiosData, groupByRows, axiosGet, axiosPost } from '../../utils/dataFetch.js';
 
+/**
+    상품 상세 정보
+*/
+export const getDetailinfo = async(pid) => {
+    const url = "/product/detailinfo";
+    const detailinfo = await axiosPost(url, {"pid":pid});
+    console.log("detailinfo =====> ", detailinfo);
+
+    return detailinfo;
+//    dispatch(filterProduct({ "product": product })); slice로 넘어가는건 아니니까
+}
+
 export const getProduct = (pid) => async (dispatch) => {
     // dispatch(filterProduct(pid)); 파라미터가 하나라면.
     const url = "/product/pid";

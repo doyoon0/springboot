@@ -18,6 +18,12 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @PostMapping("/detailinfo")
+    public String detailinfo(@RequestBody Product product) {
+        System.out.println("pid: " + product.getPid());
+        return "detailinfo!!";
+    }
+
     @GetMapping("/all")
     public List<Product> all() {
         return productService.findAll();

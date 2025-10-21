@@ -83,7 +83,7 @@ export function ProductDetail() {
                         </li>
                     )}
                 </ul>
-                    {tabName === "detail" && <Detail imgList={imgList} info={product.detailInfo} />}
+                    {tabName === "detail" && <Detail imgList={imgList} pid={pid} />}
                     {tabName === "review" && <Review />}
                     {tabName === "q&a" && <QnA />}
                     {tabName === "return" && <Return />}
