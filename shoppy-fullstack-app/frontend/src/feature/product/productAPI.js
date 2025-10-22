@@ -3,6 +3,17 @@ import { createProduct, filterProduct } from './productSlice.js';
 import { axiosData, groupByRows, axiosGet, axiosPost } from '../../utils/dataFetch.js';
 
 /**
+    상품 Return
+*/
+export const getReturn = async() => {
+    const url = "/product/return";
+    const returnData = await axiosGet(url); //전달되는 formData가 없으므로
+    const list = JSON.parse(returnData.list);
+
+    return { ...returnData, list:list}; //soft copy
+}
+
+/**
     상품 QnA
 */
 export const getQna = async(pid) => {
