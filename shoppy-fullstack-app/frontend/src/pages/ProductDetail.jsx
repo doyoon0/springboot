@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { PiGiftThin } from "react-icons/pi";
 import { ImageList } from '../components/commons/ImageList.jsx';
 import { StarRating } from '../components/commons/StarRating.jsx';
@@ -19,6 +19,8 @@ export function ProductDetail() {
     const { pid } = useParams(); //객체로 이 보따리에 담아주면 구조분해할당으로 풀어본다
     const product = useSelector((state) => state.product.product);
     let imgList = useSelector((state) => state.product.imgList);
+    const isLogin = useSelector((state) => state.auth.isLogin); //로그인 여부 확인하여 장바구니 정보 유지
+    const navigate = useNavigate(); //로그인페이지로 이동시키기 위함
 
     const [size, setSize] = useState('XS');
     const tabLabels = ['DETAIL', 'REVIEW', 'Q&A', 'RETURN & DELIVERY'];
@@ -61,7 +63,11 @@ export function ProductDetail() {
                     </li>
                     <li className='flex'>
                         <button type='button' className='product-detail-button order'>바로 구매</button>
-                        <button type='button' className='product-detail-button cart' onClick={() => {dispatch(addCart(product.pid, size))}}>쇼핑백 담기</button>
+                        <button type='button' className='product-detail-button cart'
+                                onClick={() => {
+                                isLogin? dispatch(addCart(product.pid, size))
+                                : navigate("/login") }}
+                                >쇼핑백 담기</button>
                         <div type='button' className='gift'>
                             <PiGiftThin />
                             <div className='gift-span'>선물하기</div>
@@ -78,7 +84,7 @@ export function ProductDetail() {
             <div className='product-detail-tab'>
                 <ul className='tabs'>
                     {tabLabels && tabLabels.map((label, i) =>
-                        <li className={tabName === tabEventNames[i] ? "active":"" }>
+                        <li key={i} className={tabName === tabEventNames[i] ? "active":"" }>
                             <button type='button' onClick={(e) => setTabName(tabEventNames[i])}>{label}</button>
                         </li>
                     )}
