@@ -28,10 +28,11 @@ export const cartSlice = createSlice({
 //        state.cartCount = state.cartList.reduce((total, item) => total + item.qty, 0 );
         state.cartCount = action.payload.count;
     },
-    
-    updateTotalPrice (state) {
-        state.totalPrice = state.cartList.reduce((total, item) => total + (item.qty * item.price), 0);
+
+    updateTotalPrice (state, action) {
+        state.totalPrice = action.payload.totalPrice;
     },
+
 
     updateCartItem (state, action) {
         const { cid, type } = action.payload;

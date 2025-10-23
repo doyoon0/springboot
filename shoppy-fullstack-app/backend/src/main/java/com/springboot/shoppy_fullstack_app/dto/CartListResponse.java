@@ -12,4 +12,7 @@ public class CartListResponse {
     private String size;
     private int qty;
     private int cid;
+
+    /* 총 금액 */
+    private int totalPrice;
 }
