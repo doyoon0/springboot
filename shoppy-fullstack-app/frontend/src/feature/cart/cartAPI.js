@@ -3,26 +3,40 @@ import { addCartItem, updateCartCount, showCartItem, updateTotalPrice, updateCar
 import { axiosData, axiosPost } from '../../utils/dataFetch.js';
 
 export const removeCart = (cid) => async (dispatch) => {
-    dispatch(removeCartItem({"cid": cid}));
-    dispatch(updateTotalPrice());
-    dispatch(updateCartCount());
+    const url = "/cart/deleteItem";
+    const data = {"cid" : cid};
+    const rows = await axiosPost(url, data);
+
+    const { userId } = JSON.parse(localStorage.getItem("loginInfo"));
+
+    dispatch(showCart());
+    dispatch(getCartCount(userId));
+//    dispatch(removeCartItem({"cid": cid}));
+//    dispatch(updateTotalPrice());
+//    dispatch(updateCartCount());
 }
 
 export const showCart = () => async (dispatch) => {
-    // 여기서는 Slice에 있는 cartList에 접근할수가 없기때문에 items라는 이름을 붙여 Slice로 넘긴다
-    const jsonData = await axiosData('/data/products.json');
+    const url = "/cart/list";
+    const { userId } = JSON.parse(localStorage.getItem("loginInfo"));
+    const jsonData = await axiosPost(url, {"id": userId});
+
     dispatch(showCartItem({ "items": jsonData }));
-    dispatch(updateTotalPrice());
+//    dispatch(updateTotalPrice());
 }
 
-export const updateCart = async (cid, type) => {
+export const updateCart = (cid, type) => async (dispatch) => {
     const url = "/cart/updateQty";
     const data = {"cid": cid, "type": type};
     const rows = await axiosPost(url, data);
-    return rows;
+    const { userId } = JSON.parse(localStorage.getItem("loginInfo"));
+    dispatch(getCartCount(userId));
+    dispatch(showCart());
+
+//    dispatch(updateCartCount({"count": 1, "type": type}));
 //    dispatch(updateCartItem({ "cid": cid, "type": type })); //slice에서 item으로 구조분해할당
+    return rows;
 //    dispatch(updateTotalPrice());
-//    dispatch(updateCartCount());
 
 }
 
@@ -38,6 +52,8 @@ export const checkQty = async(pid, size, id) => { //상품번호랑 사이즈가
 export const addCart = (pid, size) => async (dispatch) => {
     const { userId } = JSON.parse(localStorage.getItem("loginInfo"));
     const checkResult = await checkQty(pid, size, userId);
+
+    //db에 반영
     if(!checkResult.checkQty) {
         const url = "/cart/add";
         const item = {"pid": pid, "size": size, "qty": 1, "id": userId};
@@ -45,21 +61,21 @@ export const addCart = (pid, size) => async (dispatch) => {
         alert("새로운 상품이 추가되었습니다!!!");
         dispatch(updateCartCount({"count": 1, "type": true})); //아이콘에 +1 증가
     } else {
-        const rows = await updateCart(checkResult.cid, "+");
+        dispatch(updateCart(checkResult.cid, "+"));
         dispatch(updateCartCount({"count": 1, "type": true}));
         alert("새로운 상품이 추가되었습니다.");
     }
+
+    //cartCount에 넣어서 화면에 노출
+    dispatch(getCartCount(userId));
+
     return 1;
-
-//    dispatch(addCartItem({ "cartItem": {"pid": pid, "size": size, "qty": 1} }));
-
 };
 
-/** 장바구니 카운트 */
-export const getCartCount = async (id) => {
+/** 회원아이디별 장바구니 카운트 */
+export const getCartCount = (id) => async (dispatch) => {
     const url = "/cart/count";
     const data = {"id": id};
     const jsonData = await axiosPost(url, data);
-    console.log("getCartCount ======> ", jsonData);
-    return jsonData.sumQty;
+    dispatch(updateCartCount({"count": jsonData.sumQty})) //db에서 가지고온 값이 그대로 들아가야함. (+/- 로직에서 변경된 것)
 }

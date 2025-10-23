@@ -17,6 +17,7 @@ export function Header() {
     const isLogin = useSelector((state) => state.auth.isLogin);
     const cartCount = useSelector((state) => state.cart.cartCount);
     const navigate = useNavigate();
+    const { userId } = JSON.parse(localStorage.getItem("loginInfo"));
 
     const handleLogout = () => {
         const succ = dispatch(getLogout());
@@ -35,6 +36,7 @@ export function Header() {
                     <span>Shoppy-redux(Toolkit) ::fullstack</span>
                 </Link>
                 <nav className='header-right'>
+                    {isLogin && <span>반갑습니다, [{userId}] 님</span>}
                     <Link to="/all">Products</Link>
                     <Link to="/cart" className="header-icons-cart-link">
                         <GiShoppingCart className='header-icons' />

@@ -38,7 +38,6 @@ export const getProduct = (pid) => async (dispatch) => {
     // dispatch(filterProduct(pid)); 파라미터가 하나라면.
     const url = "/product/pid";
     const product = await axiosPost(url, {"pid":pid});
-    console.log("product------->", product);
     dispatch(filterProduct({ "product": product }));
 }
 

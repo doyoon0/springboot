@@ -1,11 +1,13 @@
 package com.springboot.shoppy_fullstack_app.repository;
 
 import com.springboot.shoppy_fullstack_app.dto.CartItem;
+import com.springboot.shoppy_fullstack_app.dto.CartListResponse;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class JdbcTemplateCartRepository implements CartRepository{
@@ -54,5 +56,32 @@ public class JdbcTemplateCartRepository implements CartRepository{
     public CartItem getCount(CartItem cartItem) {
         String sql = "select ifnull(sum(qty),0) as sumQty from cart where id = ?"; // null 처리하여 undefined 발생 방지
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), cartItem.getId());
+    }
+
+    @Override
+    public List<CartListResponse> findList(CartItem cartItem) {
+        String sql = """
+                    select
+                        m.id
+                        , p.pid
+                        , p.name
+                        , p.image
+                        , p.price
+                        , c.size
+                        , c.qty
+                        , c.cid
+                    from member as m
+                    inner join cart as c on m.id = c.id
+                    left outer join product as p on p.pid = c.pid
+                    where m.id = ?;
+                """;
+        List<CartListResponse> cartList =  jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CartListResponse.class), cartItem.getId());
+        return cartList;
+    }
+
+    @Override
+    public int deleteItem(CartItem cartItem) {
+        String sql = "delete from cart where cid = ?";
+        return jdbcTemplate.update(sql, cartItem.getCid());
     }
 }

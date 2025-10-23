@@ -22,10 +22,10 @@ export function Cart() {
         <div className='cart-container'>
             <h2 className='cart-header'>장바구니</h2>
             {cartList && cartList.map(item =>
-                <div key={item.pid}>
+                <div key={item.cid}>
                     <div className='cart-item'>
-                        {item.cid}
-                        <img src={item.image} alt="" />
+{/*                         {item.cid} */}
+                        <img src={item.image && `/images/${item.image}`} alt="" />
                         <div className='cart-item-details'>
                             <p className='cart-item-title'>{item.name}</p>
                             <p className='cart-item-title'>{item.size}</p>

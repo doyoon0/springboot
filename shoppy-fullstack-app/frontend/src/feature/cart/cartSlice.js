@@ -18,14 +18,15 @@ export const cartSlice = createSlice({
 
     showCartItem (state, action) {
         const { items } = action.payload;
-        state.cartList = cartItemsAddInfo(items, state.cartList)
+//        state.cartList = cartItemsAddInfo(items, state.cartList)
+        state.cartList = items;
     },
 
     updateCartCount (state, action) {
-        const { count, type } = action.payload;
-        type === 'login' ? state.cartCount += action.payload.count : state.cartCount = count;
-
+//        const { count, type } = action.payload;
+//        type ? state.cartCount += action.payload.count : state.cartCount = count;
 //        state.cartCount = state.cartList.reduce((total, item) => total + item.qty, 0 );
+        state.cartCount = action.payload.count;
     },
     
     updateTotalPrice (state) {
@@ -48,11 +49,15 @@ export const cartSlice = createSlice({
     removeCartItem (state, action) {
         const {cid} = action.payload;
         state.cartList = state.cartList.filter(item => !(item.cid === cid)); //삭제한것 제외하고 전부 
+    },
+
+    resetCartCount (state) {
+        state.cartCount = 0;
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addCartItem, updateCartCount, showCartItem, updateTotalPrice, updateCartItem, removeCartItem } = cartSlice.actions //컴포넌트 또는 API에서 호출(dispatch)
+export const { addCartItem, updateCartCount, showCartItem, updateTotalPrice, updateCartItem, removeCartItem, resetCartCount } = cartSlice.actions //컴포넌트 또는 API에서 호출(dispatch)
 
 export default cartSlice.reducer //store에서 import하는 기준

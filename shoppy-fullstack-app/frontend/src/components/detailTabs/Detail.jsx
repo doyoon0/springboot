@@ -17,8 +17,6 @@ export function Detail({ imgList, pid }) {
         loadData(pid);
     }, []);
 
-    console.log("info ===> ", info);
-
     return (
         <div>
             <DetailImages imgList={imgList} />
