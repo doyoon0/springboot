@@ -1,6 +1,8 @@
 import { login, logout} from '../../feature/auth/authSlice.js';
 import { validateFormCheck, validateSignupFormCheck } from '../../utils/validate.js';
 import { axiosPost } from '../../utils/dataFetch.js';
+import { getCartCount } from '../../feature/cart/cartAPI.js';
+import { updateCartCount } from '../../feature/cart/cartSlice.js';
 
 /**
     Id 중복 체크
@@ -39,14 +41,18 @@ export const getLogin = (formData, param) => async(dispatch) => {
 
         if(result) {
             dispatch(login({"userId": formData.id}));
+            //장바구니 카운트 함수 호출
+            const count = await getCartCount(formData.id);
+            //cartSlice > updateCartCount : dispatch 호출
+            dispatch(updateCartCount({"count": count, "type": true}));
             return true;
         }
-        return false;
     }
     return false;
 }
 
 export const getLogout = () => async(dispatch) => {
     dispatch(logout());
+    dispatch(updateCartCount({"count": 0, "type": false}));
     return true;
 }

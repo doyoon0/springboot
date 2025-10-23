@@ -14,6 +14,9 @@ public class CartItem {
     /* cart 아이템 수량체크 */
     private int checkQty;
     
-    /* cart 아이콘 위에 수량 업데이트*/
+    /* cart 아이콘 위에 수량 +/- 여부 */
     private String type;
+
+    /* cart 에 담긴 총 수량 */
+    private int sumQty;
 }

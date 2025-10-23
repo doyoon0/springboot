@@ -19,7 +19,6 @@ export const updateCart = async (cid, type) => {
     const url = "/cart/updateQty";
     const data = {"cid": cid, "type": type};
     const rows = await axiosPost(url, data);
-    console.log('updateCart rows =====================> ', rows);
     return rows;
 //    dispatch(updateCartItem({ "cid": cid, "type": type })); //slice에서 item으로 구조분해할당
 //    dispatch(updateTotalPrice());
@@ -44,12 +43,23 @@ export const addCart = (pid, size) => async (dispatch) => {
         const item = {"pid": pid, "size": size, "qty": 1, "id": userId};
         const rows = await axiosPost(url, item);
         alert("새로운 상품이 추가되었습니다!!!");
-        dispatch(updateCartCount()); //아이콘에 +1 증가
+        dispatch(updateCartCount({"count": 1, "type": true})); //아이콘에 +1 증가
     } else {
         const rows = await updateCart(checkResult.cid, "+");
+        dispatch(updateCartCount({"count": 1, "type": true}));
+        alert("새로운 상품이 추가되었습니다.");
     }
     return 1;
 
 //    dispatch(addCartItem({ "cartItem": {"pid": pid, "size": size, "qty": 1} }));
 
 };
+
+/** 장바구니 카운트 */
+export const getCartCount = async (id) => {
+    const url = "/cart/count";
+    const data = {"id": id};
+    const jsonData = await axiosPost(url, data);
+    console.log("getCartCount ======> ", jsonData);
+    return jsonData.sumQty;
+}

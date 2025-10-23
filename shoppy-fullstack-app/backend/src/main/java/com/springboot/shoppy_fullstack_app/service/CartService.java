@@ -6,4 +6,5 @@ public interface CartService {
     int add(CartItem cartItem);
     CartItem checkQty(CartItem cartItem);
     int updateQty(CartItem cartItem);
+    CartItem getCount(CartItem cartItem);
 }

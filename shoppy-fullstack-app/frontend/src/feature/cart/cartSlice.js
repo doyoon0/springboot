@@ -21,8 +21,11 @@ export const cartSlice = createSlice({
         state.cartList = cartItemsAddInfo(items, state.cartList)
     },
 
-    updateCartCount (state) {
-        state.cartCount = state.cartList.reduce((total, item) => total + item.qty, 0 );
+    updateCartCount (state, action) {
+        const { count, type } = action.payload;
+        type === 'login' ? state.cartCount += action.payload.count : state.cartCount = count;
+
+//        state.cartCount = state.cartList.reduce((total, item) => total + item.qty, 0 );
     },
     
     updateTotalPrice (state) {
