@@ -7,6 +7,9 @@ import "../styles/checkoutinfo.css";
 export function CheckoutInfo() {
     const cartList = useSelector((state) => state.cart.cartList);
     const totalPrice = useSelector((state) => state.cart.totalPrice);
+    const name = cartList[0].mname;
+    const phone = cartList[0].phone;
+    const email = cartList[0].email;
 
     return (
         <div className="cart-container">
@@ -17,14 +20,14 @@ export function CheckoutInfo() {
                 <div className="info-box">
                     <div className="info-grid">
                         <div className="label">이름</div>
-                        <div className="value">홍길동</div>
+                        <div className="value">{name}</div>
 
                         <div className="label">이메일</div>
-                        <div className="value">hong@naver.com</div>
+                        <div className="value">{email}</div>
 
                         <div className="label">휴대폰 번호</div>
                         <div className="value phone-input">
-                            <input type="text" value="010-1234-1234" />
+                            <input type="text" value={phone} />
                             <button className="btn">수정</button>
                         </div>
                     </div>
@@ -65,8 +68,8 @@ export function CheckoutInfo() {
                 <>
                     <div className="label">상품명</div>
                     <div className="value">
-                        <img src={item.image} alt="product image" style={{width:'35px'}} />
-                        {item.pname}, {item.info}, 수량({item.qty}), 가격({item.price.toLocaleString()}원)
+                        <img src={`/images/${item.image}`} alt="product image" style={{width:'35px'}} />
+                        {item.name}, {item.info}, 수량({item.qty}), 가격({item.price.toLocaleString()}원)
                     </div>
                 </>
             )}

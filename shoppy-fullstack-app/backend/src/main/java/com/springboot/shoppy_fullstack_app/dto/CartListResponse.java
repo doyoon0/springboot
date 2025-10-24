@@ -6,6 +6,10 @@ import lombok.Data;
 public class CartListResponse {
     private String id;
     private int pid;
+    private String mname;
+    private String phone;
+    private String email;
+    private String info;
     private String name;
     private String image;
     private int price;
