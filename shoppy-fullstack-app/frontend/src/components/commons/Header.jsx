@@ -17,7 +17,8 @@ export function Header() {
     const isLogin = useSelector((state) => state.auth.isLogin);
     const cartCount = useSelector((state) => state.cart.cartCount);
     const navigate = useNavigate();
-    const { userId } = JSON.parse(localStorage.getItem("loginInfo"));
+    let userId = null;
+    if(isLogin) userId  = JSON.parse(localStorage.getItem("loginInfo")).userId;
 
     const handleLogout = () => {
         const succ = dispatch(getLogout());
