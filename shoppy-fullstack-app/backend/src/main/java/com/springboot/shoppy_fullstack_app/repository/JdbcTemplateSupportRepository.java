@@ -19,20 +19,20 @@ public class JdbcTemplateSupportRepository implements SupportRepository{
     }
 
     @Override
-    public List<Support> findByType(Support support) {
-        String stype = support.getStype();
-        String sql = "";
-        Object[] params;
-
-        if(stype == null || stype.trim().isEmpty()) {
-            sql = "select sid, title, content, stype, hits, rdate from support";
-            params = new Object[]{};
-        } else {
-            sql = "select sid, title, content, stype, hits, rdate from support where stype = ?";
-            params = new Object[]{stype};
-        }
-        List<Support> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Support.class), params);
-        return list;
+    public List<Support> findAll(Support support) {
+        String sql = """
+                select sid, title, stype, hits, rdate from support
+                    where stype = ?
+                """;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Support.class), support.getStype());
     }
 
+
+    @Override
+    public List<Support> findAll() {
+        String sql = """
+                select sid, title, stype, hits, rdate from support
+                """;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Support.class));
+    }
 }

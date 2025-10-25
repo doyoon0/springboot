@@ -12,6 +12,7 @@ export function Support() {
     useEffect(()=>{
         const fetch = async() => {
             const jsonData = await axiosData("/data/support.json");
+            const list = await getList('all');
             setMenus(jsonData.menus);
             setCategory(jsonData.category);
             setList(list);
@@ -19,21 +20,10 @@ export function Support() {
         fetch();
     }, []);
 
-    const filterList = (type) => {
-        const filter = async() => {
-            let result = "";
-
-            if(type === 'all') {
-                result = await getList("");
-            } else {
-                result = await getList(type);
-            }
-
-            console.log("으아아악! ========> ", result);
-            setList(result);
-        }
-        filter();
-    }
+    const filterList = async(stype) => {
+        const list = await getList(stype);
+        setList(list);
+    }    
 
     return (  
         <div className="content">
@@ -56,7 +46,7 @@ export function Support() {
                             {list && list.map((item, idx) => 
                                 <tr>
                                     <td>{idx + 1}</td>
-                                    <td>[{item.type}]</td>
+                                    <td>[{item.stype}]</td>
                                     <td>{item.title}</td>
                                     <td>{item.rdate}</td>
                                     <td>{item.hits}</td>

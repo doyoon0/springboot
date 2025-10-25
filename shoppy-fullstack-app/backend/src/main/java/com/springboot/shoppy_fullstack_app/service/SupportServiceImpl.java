@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class SupportServiceImpl implements SupportService{
 
-    private final SupportRepository supportRepository;
+    private SupportRepository supportRepository;
 
     @Autowired
     public SupportServiceImpl(SupportRepository supportRepository) {
@@ -18,7 +18,13 @@ public class SupportServiceImpl implements SupportService{
     }
 
     @Override
-    public List<Support> findByType(Support support) {
-        return supportRepository.findByType(support);
+    public List<Support> findAll(Support support) {
+        List<Support> list = null;
+        if(support.getStype().equals("all")) {
+            list = supportRepository.findAll();
+        } else {
+            list = supportRepository.findAll(support);
+        }
+        return list;
     }
 }
