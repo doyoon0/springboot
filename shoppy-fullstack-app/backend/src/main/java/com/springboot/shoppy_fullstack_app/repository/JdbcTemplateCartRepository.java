@@ -18,57 +18,75 @@ public class JdbcTemplateCartRepository implements CartRepository{
     }
 
     @Override
-    public int add(CartItem cartItem) {
+    public List<CartListResponse> findList(CartItem cartItem) {
         String sql = """
-                    insert into cart(size, qty, pid, id, cdate) 
-                    values(?, ?, ?, ?, now())
+                select id, mname, phone, email, pid, name, info, image, price, size, qty, cid, totalPrice\s
+                from view_cartlist
+                where id = ?
                 """;
-        Object[] param = {cartItem.getSize(), cartItem.getQty(), cartItem.getPid(), cartItem.getId()};
-
-        return jdbcTemplate.update(sql, param); //insert, delete, update 는 모두 update로 통일
+        Object[] params = { cartItem.getId() };
+        return jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<>(CartListResponse.class), params);
     }
 
     @Override
-    public CartItem checkQty(CartItem cartItem) {
+    public int deleteItem(CartItem cartItem) {
         String sql = """
-                    select
-                    	ifnull(max(cid), 0) as cid,
-                        count(*) as checkQty
-                    from cart
-                    where pid = ? and size = ? and id = ?;
+                delete from cart where cid = ?
                 """;
-        Object[] param = {cartItem.getPid(), cartItem.getSize(), cartItem.getId()};
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), param);
+        return jdbcTemplate.update(sql, cartItem.getCid());
+    }
+
+    @Override
+    public CartItem getCount(CartItem cartItem) {
+        String sql = "select ifnull(sum(qty), 0) as sumQty from cart where id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), cartItem.getId());
     }
 
     @Override
     public int updateQty(CartItem cartItem) {
         String sql = "";
         if(cartItem.getType().equals("+")) {
-            sql = "update cart set qty = qty + 1 where cid = ?";
+            sql = " update cart set qty = qty + 1 where cid =? ";
         } else {
-            sql = "update cart set qty = qty - 1 where cid = ?";
+            sql = " update cart set qty = qty - 1 where cid =? ";
+        }
+//        System.out.println("updateQty :: " + sql);
+        return jdbcTemplate.update(sql, cartItem.getCid());
+    }
+
+    @Override
+    public CartItem checkQty(CartItem cartItem) {
+//        System.out.println("CartRepository :: " + cartItem.getPid() + cartItem.getSize() + cartItem.getId());
+        String sql = """
+                SELECT
+                   ifnull(MAX(cid), 0) AS cid,
+                   COUNT(*) AS checkQty
+                 FROM cart
+                 WHERE pid = ? AND size = ? AND id = ?
+                """;
+
+        Object[] params = {
+                cartItem.getPid(), cartItem.getSize(), cartItem.getId()
         };
-        return jdbcTemplate.update(sql, cartItem.getCid());
+        CartItem resultCartItem = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), params);
+
+//        System.out.println("checkQty :: resultCartItem = " + resultCartItem);
+        return resultCartItem;
     }
 
     @Override
-    public CartItem getCount(CartItem cartItem) {
-        String sql = "select ifnull(sum(qty),0) as sumQty from cart where id = ?"; // null 처리하여 undefined 발생 방지
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), cartItem.getId());
-    }
-
-    @Override
-    public List<CartListResponse> findList(CartItem cartItem) {
-        String sql = " select * from view_cartlist where id = ? ";
-        Object[] params = {cartItem.getId()};
-        List<CartListResponse> cartList =  jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CartListResponse.class), params);
-        return cartList;
-    }
-
-    @Override
-    public int deleteItem(CartItem cartItem) {
-        String sql = "delete from cart where cid = ?";
-        return jdbcTemplate.update(sql, cartItem.getCid());
+    public int add(CartItem cartItem) {
+        String sql = """
+                insert into cart(size, qty, pid, id, cdate)
+                    values(?, ?, ?, ?, now())                
+                """;
+        Object [] params = {
+                cartItem.getSize(),
+                cartItem.getQty(),
+                cartItem.getPid(),
+                cartItem.getId()
+        };
+        return jdbcTemplate.update(sql, params);
     }
 }

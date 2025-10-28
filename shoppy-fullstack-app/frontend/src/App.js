@@ -16,6 +16,7 @@ import { CartProvider } from './context/CartContext.js';
 import { AuthProvider } from './context/AuthContext.js';
 import { ProtectedPageRoute } from './pages/ProtectedPageRoute.js';
 import { ProductProvider } from './context/ProductContext.js';
+import { PayResult } from './pages/PayResult.jsx';
 
 export default function App() {
 
@@ -41,6 +42,7 @@ export default function App() {
                     <CheckoutInfo />
                   </ProtectedPageRoute>
                 } />
+                <Route path="/payResult" element={<PayResult />} />
                 <Route path='/support' element={
                   <ProtectedPageRoute>
                     <Support />
