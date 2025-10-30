@@ -38,7 +38,7 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
 
     @Override
     public String findByIdnPwd(String id) {
-        String sql = "select pwd from member where id = ?";
+        String sql = "select ifnull(MAX(pwd), null) as pwd from member where id = ?";
         // 방법 1.
         Member member = jdbcTemplate.queryForObject(sql,
                 new BeanPropertyRowMapper<>(Member.class), //RowMapper<T>

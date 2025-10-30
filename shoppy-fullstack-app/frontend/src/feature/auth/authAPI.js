@@ -36,10 +36,11 @@ export const getLogin = (formData, param) => async(dispatch) => {
             SpringBoot - @RestController, @PostMapping("/member/login")
             axios api
         */
-        const url = "/member/login";
+        const url = "/member/login"; //프록시를 통해 전송시 상대경로입력!!
         const result = await axiosPost(url, formData);
+        console.log("result :: ", result);
 
-        if(result) {
+        if(result.login) {
             dispatch(login({"userId": formData.id}));
             //장바구니 카운트 함수 호출
             dispatch(getCartCount(formData.id));
@@ -50,7 +51,12 @@ export const getLogin = (formData, param) => async(dispatch) => {
 }
 
 export const getLogout = () => async(dispatch) => {
-    dispatch(logout());
-    dispatch(resetCartCount());
-    return true;
+    const url = "/member/logout"; //세션 무효화 작업 시작!
+    const result = await axiosPost(url, {}); //JSON 보낼거 없으므로 빈 객체로 보냄. 아무것도 안보내면 mapping이 안되어서 에러남
+
+    if(result) {
+        dispatch(logout());
+        dispatch(resetCartCount());
+    }
+    return result;
 }
