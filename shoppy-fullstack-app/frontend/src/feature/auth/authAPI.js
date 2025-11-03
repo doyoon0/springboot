@@ -3,6 +3,7 @@ import { validateFormCheck, validateSignupFormCheck } from '../../utils/validate
 import { axiosPost } from '../../utils/dataFetch.js';
 import { getCartCount } from '../../feature/cart/cartAPI.js';
 import { updateCartCount, resetCartCount } from '../../feature/cart/cartSlice.js';
+import { refreshCsrfToken } from '../csrf/manageCsrfToken.js';
 
 /**
     Id 중복 체크
@@ -50,11 +51,15 @@ export const getLogin = (formData, param) => async(dispatch) => {
     return false;
 }
 
+/**
+ Logout
+*/
 export const getLogout = () => async(dispatch) => {
     const url = "/member/logout"; //세션 무효화 작업 시작!
     const result = await axiosPost(url, {}); //JSON 보낼거 없으므로 빈 객체로 보냄. 아무것도 안보내면 mapping이 안되어서 에러남
 
     if(result) {
+        refreshCsrfToken();
         dispatch(logout());
         dispatch(resetCartCount());
     }

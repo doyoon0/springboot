@@ -66,6 +66,7 @@ public class MemberController {
         if(ssid != null && sid != null) {
             session.invalidate(); //세션 삭제 - 스프링의 세션 테이블에서 삭제됨
 
+            //3. JSESSIONID 만료 쿠키 전송 (path/Domain 꼭 기존과 동일)
             var cookie = new Cookie("JSESSIONID", null); //호불호 갈리는 var 의 사용
             cookie.setPath("/");                // <- 기존과 동일
             cookie.setMaxAge(0);                // <- 즉시 만료 (유효기간)
@@ -73,6 +74,15 @@ public class MemberController {
             // cookie.setSecure(true);          // HTTPS에서만. 로컬 http면 주석
             // cookie.setDomain("localhost");   // 기존 쿠키가 domain=localhost였다면 지정
             response.addCookie(cookie); //브라우저에 붙어서 넘어가는 값
+
+            //4. CSRF 토큰을 재발행하여 출력
+            var xsrf = new Cookie("XSRF-TOKEN", null); //호불호 갈리는 var 의 사용
+            xsrf.setPath("/");                // <- 기존과 동일
+            xsrf.setMaxAge(0);                // <- 즉시 만료 (유효기간)
+            xsrf.setHttpOnly(false);           // 재발행
+            // xsrf.setSecure(true);          // HTTPS에서만. 로컬 http면 주석
+            // xsrf.setDomain("localhost");   // 기존 쿠키가 domain=localhost였다면 지정
+            response.addCookie(xsrf); //브라우저에 붙어서 넘어가는 값
         }
 
         return ResponseEntity.ok(true); //실제 React에게 넘어가는 값
