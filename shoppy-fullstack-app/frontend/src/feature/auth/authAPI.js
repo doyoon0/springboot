@@ -42,6 +42,7 @@ export const getLogin = (formData, param) => async(dispatch) => {
         console.log("result :: ", result);
 
         if(result.login) {
+            await refreshCsrfToken();
             dispatch(login({"userId": formData.id}));
             //장바구니 카운트 함수 호출
             dispatch(getCartCount(formData.id));

@@ -22,8 +22,8 @@ export function Header() {
 
     const handleLogout = () => {
         const succ = dispatch(getLogout());
-        const loginInfo = localStorage.getItem("loginInfo");
-        if(succ && loginInfo === null) { 
+//         const loginInfo = localStorage.getItem("loginInfo");
+        if(succ) {
             alert("로그아웃 되었습니다.");
             navigate("/");
         }

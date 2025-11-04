@@ -9,7 +9,7 @@ export const authSlice = createSlice({
     login(state, action) {
         state.isLogin = !state.isLogin;
         const { userId } = action.payload;
-        const loginInfo = {"token": "123455dkfdf", "userId": userId};
+        const loginInfo = {"userId": userId};
         localStorage.setItem("loginInfo", JSON.stringify(loginInfo)); //여기서 String타입으로 저장하기때문에 API에서 다시 parsing 해야함
 
     },

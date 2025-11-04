@@ -32,21 +32,21 @@ public class CartController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<?> findList(@RequestBody CartItem cartItem,
+    public List<CartListResponse> findList(@RequestBody CartItem cartItem,
                                    HttpServletRequest request ) {
-        HttpSession session = request.getSession(false); //기존에 생성된 세션 가져오기
-        String sid = (String)session.getAttribute("sid");
-        String ssid = session.getId();
-        ResponseEntity<?> response = null;
-
-        if(ssid != null && sid != null) {
-            System.out.println("ssid :: " + ssid + " sid :: " + sid);
-            List<CartListResponse> list = cartService.findList(cartItem);
-            response = ResponseEntity.ok(list);
-        } else {
-            response = ResponseEntity.ok(Map.of("message", false)); //security config, react에서 두번 막기때문에 의미는 업음
-        }
-        return response;
+//        HttpSession session = request.getSession(false); //기존에 생성된 세션 가져오기
+//        String sid = (String)session.getAttribute("sid");
+//        String ssid = session.getId();
+//        ResponseEntity<?> response = null;
+//
+//        if(ssid != null && sid != null) {
+//            System.out.println("ssid :: " + ssid + " sid :: " + sid);
+//            List<CartListResponse> list = cartService.findList(cartItem);
+//            response = ResponseEntity.ok(list);
+//        } else {
+//            response = ResponseEntity.ok(Map.of("message", false)); //security config, react에서 두번 막기때문에 의미는 업음
+//        }
+        return cartService.findList(cartItem);
     }
 
     @PostMapping("/count")
