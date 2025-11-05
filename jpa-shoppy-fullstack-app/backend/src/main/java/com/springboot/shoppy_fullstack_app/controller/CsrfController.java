@@ -1,0 +1,26 @@
+package com.springboot.shoppy_fullstack_app.controller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/csrf")
+public class CsrfController {
+    @GetMapping("/create")
+    public ResponseEntity<?> create(HttpServletRequest request) {
+        /** CSRF 토큰을 생성하여 쿠키에 실어서 보냄 - 쿠키는 Response~~ 응답객체에 자동 실림 */
+        CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("/refresh") //프론트에서 로그아웃 발생시 토큰을 재발급
+    public ResponseEntity<?> refresh(HttpServletRequest request) {
+//        request.changeSessionId(); 이제 내부적으로 security config에서 관리하니까 여기서 재호출할 필요 없음
+        CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        return ResponseEntity.ok(token);
+    }
+}
