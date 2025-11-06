@@ -1,16 +1,16 @@
 package com.springboot.shoppy_fullstack_app.service;
 
-import com.springboot.shoppy_fullstack_app.dto.Product;
-import com.springboot.shoppy_fullstack_app.dto.ProductDetailinfo;
-import com.springboot.shoppy_fullstack_app.dto.ProductQna;
-import com.springboot.shoppy_fullstack_app.dto.ProductReturn;
+import com.springboot.shoppy_fullstack_app.dto.ProductDto;
+import com.springboot.shoppy_fullstack_app.dto.ProductDetailinfoDto;
+import com.springboot.shoppy_fullstack_app.dto.ProductQnaDto;
+import com.springboot.shoppy_fullstack_app.dto.ProductReturnDto;
 
 import java.util.List;
 
 public interface ProductService {
-    List<Product> findAll();
-    Product findById(int pid);
-    ProductDetailinfo findDetailinfo(int pid);
-    List<ProductQna> findQna(int pid);
-    ProductReturn findReturn();
+    List<ProductDto> findAll();
+    ProductDto findById(int pid);
+    ProductDetailinfoDto findDetailinfo(int pid);
+    List<ProductQnaDto> findQna(int pid);
+    ProductReturnDto findReturn();
 }
