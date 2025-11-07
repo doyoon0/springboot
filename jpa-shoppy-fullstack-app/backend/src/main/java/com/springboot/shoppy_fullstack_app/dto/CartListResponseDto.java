@@ -1,9 +1,15 @@
 package com.springboot.shoppy_fullstack_app.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-public class CartListResponse {
+@Setter
+@Getter
+@AllArgsConstructor //기본생성자 만들어주고, Setter 이용해서 주입
+public class CartListResponseDto {
     private String id;
     private int pid;
     private String mname;

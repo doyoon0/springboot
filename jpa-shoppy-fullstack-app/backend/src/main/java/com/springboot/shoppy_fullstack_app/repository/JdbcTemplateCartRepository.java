@@ -1,7 +1,7 @@
 package com.springboot.shoppy_fullstack_app.repository;
 
-import com.springboot.shoppy_fullstack_app.dto.CartItem;
-import com.springboot.shoppy_fullstack_app.dto.CartListResponse;
+import com.springboot.shoppy_fullstack_app.dto.CartItemDto;
+import com.springboot.shoppy_fullstack_app.dto.CartListResponseDto;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,19 +18,19 @@ public class JdbcTemplateCartRepository implements CartRepository{
     }
 
     @Override
-    public List<CartListResponse> findList(CartItem cartItem) {
+    public List<CartListResponseDto> findList(CartItemDto cartItem) {
         String sql = """
-                select id, mname, phone, email, pid, name, info, image, price, size, qty, cid, totalPrice\s
+                select id, mname, phone, email, pid, name, info, image, price, size, qty, cid, total_price
                 from view_cartlist
                 where id = ?
                 """;
         Object[] params = { cartItem.getId() };
         return jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper<>(CartListResponse.class), params);
+                new BeanPropertyRowMapper<>(CartListResponseDto.class), params);
     }
 
     @Override
-    public int deleteItem(CartItem cartItem) {
+    public int deleteItem(CartItemDto cartItem) {
         String sql = """
                 delete from cart where cid = ?
                 """;
@@ -38,13 +38,13 @@ public class JdbcTemplateCartRepository implements CartRepository{
     }
 
     @Override
-    public CartItem getCount(CartItem cartItem) {
+    public CartItemDto getCount(CartItemDto cartItem) {
         String sql = "select ifnull(sum(qty), 0) as sumQty from cart where id = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), cartItem.getId());
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItemDto.class), cartItem.getId());
     }
 
     @Override
-    public int updateQty(CartItem cartItem) {
+    public int updateQty(CartItemDto cartItem) {
         String sql = "";
         if(cartItem.getType().equals("+")) {
             sql = " update cart set qty = qty + 1 where cid =? ";
@@ -56,8 +56,9 @@ public class JdbcTemplateCartRepository implements CartRepository{
     }
 
     @Override
-    public CartItem checkQty(CartItem cartItem) {
+    public CartItemDto checkQty(CartItemDto cartItem) {
 //        System.out.println("CartRepository :: " + cartItem.getPid() + cartItem.getSize() + cartItem.getId());
+        //checkQty 처럼 테이블 컬럼이 아니라 함수로 만들어지는애는 entity가 아니라, dto이다. entity는 테이블과 1:1 매칭이 되어야함.
         String sql = """
                 SELECT
                    ifnull(MAX(cid), 0) AS cid,
@@ -69,17 +70,17 @@ public class JdbcTemplateCartRepository implements CartRepository{
         Object[] params = {
                 cartItem.getPid(), cartItem.getSize(), cartItem.getId()
         };
-        CartItem resultCartItem = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItem.class), params);
+        CartItemDto resultCartItem = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartItemDto.class), params);
 
 //        System.out.println("checkQty :: resultCartItem = " + resultCartItem);
         return resultCartItem;
     }
 
     @Override
-    public int add(CartItem cartItem) {
+    public int add(CartItemDto cartItem) {
         String sql = """
                 insert into cart(size, qty, pid, id, cdate)
-                    values(?, ?, ?, ?, now())                
+                    values(?, ?, ?, ?, now())
                 """;
         Object [] params = {
                 cartItem.getSize(),
