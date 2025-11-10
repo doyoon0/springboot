@@ -1,39 +1,73 @@
 package com.springboot.shoppy_fullstack_app.service;
 
-import com.springboot.shoppy_fullstack_app.dto.KakaoPay;
+import com.springboot.shoppy_fullstack_app.dto.KakaoPayDto;
+import com.springboot.shoppy_fullstack_app.entity.Order;
+import com.springboot.shoppy_fullstack_app.jpa_repository.JpaCartRepository;
+import com.springboot.shoppy_fullstack_app.jpa_repository.JpaOrderRepository;
 import com.springboot.shoppy_fullstack_app.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-//@Transactional
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
+    private JpaOrderRepository jpaOrderRepository;
+    private JpaCartRepository jpaCartRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository){
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            JpaOrderRepository jpaOrderRepository,
+                            JpaCartRepository jpaCartRepository){
         this.orderRepository = orderRepository;
+        this.jpaOrderRepository = jpaOrderRepository;
+        this.jpaCartRepository = jpaCartRepository;
     }
 
     @Override
-    @Transactional
-    public int save(KakaoPay kakaoPay) {
-        int rows = orderRepository.saveOrders(kakaoPay);
-        if (rows != 1) {
-            throw new RuntimeException("주문 저장 실패");
-        }
+    public int save(KakaoPayDto kakaoPayDto) {
+        int result = 0;
 
-        int rows_detail = orderRepository.saveOrderDetail(kakaoPay);
-        if (rows_detail < 1) {
-            throw new RuntimeException("주문 상세 저장 실패");
-        }
+        //Step1 : Orders 테이블 저장
+        Order entity = jpaOrderRepository.save(new Order(kakaoPayDto));
+        if(entity == null) System.out.println("step1 주문테이블 저장 실패!!");
 
-        int rows_cart = orderRepository.deleteCartItem(kakaoPay.getCidList());
-        if (rows_cart < 1) {
-            System.out.println("장바구니 항목 삭제 실패 (이미 비었을 수 있음)");
-        }
+        //Step2 : Order_detail 테이블 저장
+        int rows = jpaOrderRepository.saveOrderDetail(kakaoPayDto.getOrderId(),
+                                                    kakaoPayDto.getPaymentInfo().getDiscountAmount(),
+                                                    kakaoPayDto.getCidList());
+        if(rows ==0) System.out.println("step2 주문상세테이블 저장 실패!!");
 
-        return rows;
+        //Step3 : Cart 테이블 아이템 삭제 - JpaCartRepository에서 삭제 진행
+        int cartRows = jpaCartRepository.deleteItemList(kakaoPayDto.getCidList());
+        if(cartRows == 0) System.out.println("step3 장바구니 아이템 삭제 실패!!");
+
+        if(entity != null && rows != 0 && cartRows != 0) result = 1;
+
+        return result;
     }
+
+    
+
+//    @Override
+//    @Transactional //DB연동로직을 하나의 트랜잭션으로 관리
+//    public int save(KakaoPayDto kakaoPay) {
+//        int rows = orderRepository.saveOrders(kakaoPay);
+//        if (rows != 1) {
+//            throw new RuntimeException("주문 저장 실패");
+//        }
+//
+//        int rows_detail = orderRepository.saveOrderDetail(kakaoPay);
+//        if (rows_detail < 1) {
+//            throw new RuntimeException("주문 상세 저장 실패");
+//        }
+//
+//        int rows_cart = orderRepository.deleteCartItem(kakaoPay.getCidList());
+//        if (rows_cart < 1) {
+//            System.out.println("장바구니 항목 삭제 실패 (이미 비었을 수 있음)");
+//        }
+//
+//        return rows;
+//    }
 }

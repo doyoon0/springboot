@@ -13,37 +13,37 @@ import java.util.List;
 
 @Repository
 public interface JpaCartRepository extends JpaRepository<CartItem, Integer> {
-    /** step3 : 주문/결제 - 장바구니(Cart) 아이템 삭제 **/
+    /*** 👌 Step: 3 주문/결제 - 장바구니 삭제    */
     @Modifying
     @Query("delete from CartItem c where c.cid in (:cidList)")
-    int deleteItemList(@Param("cidList") List<Integer> cidList);
+    int deleteCartItem(@Param("cidList") List<Integer> cidList);
 
-    //🛒장바구니 아이템 삭제
+    //장바구니 아이템 삭제
     @Modifying
     @Query("""
             delete from CartItem c where c.cid = :cid
             """)
     int deleteItem(@Param("cid") int cid);
 
-    //🛒장바구니 아이템 카운트 - Native Query 방식
+    //🛒 장바구니 아이템 카운트 - Ultimate 버전에서는 JPQL 방식으로 작성하세요.
     @Query(value = """
-            select ifnull(sum(qty), 0) as sumQty from cart where id = :id
+              select ifnull(sum(qty), 0) as sumQty from cart  where id = :id
             """, nativeQuery = true)
     int countById(@Param("id") String id);
 
-    //🛒장바구니 전체 리스트 조회 - 엔티티 주소 전체를 리턴하는 경우 DTO에 생성자로 주입필수!!! (v)로 했더니 매핑이 안됨
-    // 아래는 하나하나 return 하는 형태
+
+    //🛒 장바구니 전체 리스트 조회 - 엔티티 주소 전체를 리턴하는 경우 DTO에 생성자로 주입필수!!
     @Query("""
             select new com.springboot.shoppy_fullstack_app.dto.CartListResponseDto(
-                v.id, v.pid, v.mname, v.phone, v.email, v.info,
-               v.name, v.image, v.price, v.size, v.qty, v.cid, v.totalPrice
+                v.id, v.mname, v.phone, v.email, v.pid, v.name, v.info,
+                v.image, v.price, v.size, v.qty, v.cid, v.totalPrice
             )
-            from CartListView v
-            where v.id = :id
+                from CartListView v
+                where v.id = :id
             """)
-    List<CartListResponseDto> findCartListById(@Param("id") String id);
+    List<CartListResponseDto> findList(@Param("id") String id);
 
-    //🛒장바구니 상품 수량 업데이트
+    //🛒 장바구니 상품 수량 업데이트
     @Modifying
     @Query("update CartItem c set c.qty = c.qty + 1 where c.cid = :cid")
     int increaseQty(@Param("cid") int cid);
@@ -52,17 +52,19 @@ public interface JpaCartRepository extends JpaRepository<CartItem, Integer> {
     @Query("update CartItem c set c.qty = c.qty - 1 where c.cid = :cid")
     int decreaseQty(@Param("cid") int cid);
 
-
-    //🛒장바구니 상품 수량 체크
-    // DTO는 Entity가 아니기 때문에 객체를 생성해야 한다.
-    // 이때, JPQL의 "new" 키워드를 사용하여 DTO 객체를 직접 생성하고, 해당 객체에 필요한 값을 생성자 주입 방식으로 전달한다.
+    //🛒 장바구니 상품 수량 체크
     @Query("""
             select new com.springboot.shoppy_fullstack_app.dto.CartCheckQtyDto(c.cid, count(c))
-            from CartItem c
-            where c.pid = :pid and c.size = :size and c.id = :id
-            group by c.cid
+                from CartItem c 
+                where c.pid = :pid 
+                  and c.size = :size 
+                  and c.id = :id
+                group by c.cid 
             """)
-    CartCheckQtyDto checkQty(@Param("pid") int pid, @Param("size") String size, @Param("id") String id);
+    CartCheckQtyDto checkQty(@Param("pid") int pid,
+                             @Param("size") String size,
+                             @Param("id") String id);
 
-    CartItem save(CartItem cartItem); //🛒장바구니 상품 추가
+    CartItem save(CartItem cartItem);   //🛒 장바구니 상품 추가
 }
+

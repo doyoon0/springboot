@@ -1,14 +1,15 @@
 package com.springboot.shoppy_fullstack_app.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-public class KakaoPay {
+@AllArgsConstructor
+@NoArgsConstructor
+public class KakaoPayDto {
     private String orderId;
     private String userId;
     private String itemName;
@@ -33,6 +34,7 @@ public class KakaoPay {
         private int shippingFee;
         private int discountAmount;
         private int totalAmount;
-    }//PaymentInfo
+    }
+
 }//KakaoPay dto
 
