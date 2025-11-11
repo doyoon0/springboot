@@ -16,6 +16,9 @@ public class SupportDto {
     private int currentPage;
     private int pageSize;
 
+    private String type;
+    private String keyword;
+
     //Entity <=> Dto : Front 결과 출력시 필요
     public SupportDto() {}
     public SupportDto(Support entity) {

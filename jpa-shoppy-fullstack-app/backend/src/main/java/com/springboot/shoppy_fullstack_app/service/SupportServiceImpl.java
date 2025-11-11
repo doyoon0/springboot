@@ -60,4 +60,11 @@ public class SupportServiceImpl implements SupportService{
                 list.getNumber()
         );
     }
+
+    @Override
+    public PageResponseDto<SupportDto> findSearchAll(SupportDto support) {
+        System.out.println("type --------->> " + support.getType());
+        System.out.println("keyword ------------->> " + support.getKeyword());
+        return null;
+    }
 }
