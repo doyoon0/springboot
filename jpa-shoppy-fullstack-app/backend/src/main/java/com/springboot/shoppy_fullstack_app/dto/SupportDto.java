@@ -11,6 +11,10 @@ public class SupportDto {
     private String stype;
     private int hits;
     private String rdate;
+    private int rowNumber;
+
+    private int currentPage;
+    private int pageSize;
 
     //Entity <=> Dto : Front 결과 출력시 필요
     public SupportDto() {}
