@@ -17,8 +17,19 @@ export function Header() {
     const isLogin = useSelector((state) => state.auth.isLogin);
     const cartCount = useSelector((state) => state.cart.cartCount);
     const navigate = useNavigate();
+//     let userId = null;
+//     if(isLogin) userId  = JSON.parse(localStorage.getItem("loginInfo")).userId;
+
+    //isLogin이 true일 때만 localStorage 접근
     let userId = null;
-    if(isLogin) userId  = JSON.parse(localStorage.getItem("loginInfo")).userId;
+
+    if (isLogin) {
+      const loginInfo = localStorage.getItem("loginInfo");
+      if (loginInfo) {
+        userId = JSON.parse(loginInfo).userId;
+      }
+    }
+
 
     const handleLogout = () => {
         const succ = dispatch(getLogout());

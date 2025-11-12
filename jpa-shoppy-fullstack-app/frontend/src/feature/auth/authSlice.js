@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const saveAuth = JSON.parse(localStorage.getItem("auth"));
+
 export const authSlice = createSlice({
   name: 'auth',
-  initialState: {
+  initialState: saveAuth || {
     isLogin: false
   },
   reducers: {
@@ -12,10 +14,22 @@ export const authSlice = createSlice({
         const loginInfo = {"userId": userId};
         localStorage.setItem("loginInfo", JSON.stringify(loginInfo)); //여기서 String타입으로 저장하기때문에 API에서 다시 parsing 해야함
 
+        //새로고침을 위한 데이터 복사(localStorage 저장)
+        localStorage.setItem("auth",
+            JSON.stringify({
+//                "isLogin" : isLogin //이름이 같은 경우 한쪽을 생략해도 된다.
+                isLogin: true,
+                userId
+            })
+        )
+
+
     },
     logout(state) {
         state.isLogin = !state.isLogin;
         localStorage.removeItem("loginInfo");
+        localStorage.removeItem("auth");
+        localStorage.removeItem("cart");
     }
   }
 })
