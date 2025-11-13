@@ -15,6 +15,7 @@ export function Header() {
 
     const dispatch = useDispatch();    
     const isLogin = useSelector((state) => state.auth.isLogin);
+    const role = useSelector((state) => state.auth.role);
     const cartCount = useSelector((state) => state.cart.cartCount);
     const navigate = useNavigate();
 //     let userId = null;
@@ -48,7 +49,7 @@ export function Header() {
                     <span>Shoppy-redux(Toolkit) ::fullstack JPA</span>
                 </Link>
                 <nav className='header-right'>
-                    {isLogin && <span>반갑습니다, [{userId}] 님</span>}
+                    {isLogin && <span>반갑습니다, [{userId}::{role}] 님</span>}
                     <Link to="/all">Products</Link>
                     <Link to="/cart" className="header-icons-cart-link">
                         <GiShoppingCart className='header-icons' />
@@ -69,6 +70,9 @@ export function Header() {
                             <button type="button">Support</button>
                         </Link>
                     }
+                   <Link to="/admin">
+                        <button type="button">Admin</button>
+                   </Link>
                 </nav>
             </div>
         </div>

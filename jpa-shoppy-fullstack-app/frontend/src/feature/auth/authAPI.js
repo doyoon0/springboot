@@ -43,7 +43,7 @@ export const getLogin = (formData, param) => async(dispatch) => {
 
         if(result.login) {
             await refreshCsrfToken();
-            dispatch(login({"userId": formData.id}));
+            dispatch(login({"userId": formData.id, "role":result.role[0].authority})); //role: Array(1) 0: {authority: 'ROLE_USER'}
             //장바구니 카운트 함수 호출
             dispatch(getCartCount(formData.id));
             return true;

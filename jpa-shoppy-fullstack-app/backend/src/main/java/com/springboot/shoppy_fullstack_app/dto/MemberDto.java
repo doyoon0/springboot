@@ -10,12 +10,14 @@ public class MemberDto {
     private String name;
     private String phone;
     private String email;
+    private String role;
 
     //Member 엔티티의 결과를 저장하기 위한 생성자 정의 필요
     public MemberDto() {}
-    public MemberDto(String id, String pwd) {
+    public MemberDto(String id, String pwd, String role) {
         this.id = id;
         this.pwd = pwd;
+        this.role = role;
     }
 
     public MemberDto(Member entity) {
@@ -24,5 +26,6 @@ public class MemberDto {
         this.name = entity.getName();
         this.phone = entity.getPhone();
         this.email = entity.getEmail();
+        this.role = entity.getRole();
     }
 }

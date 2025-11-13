@@ -17,6 +17,8 @@ import { AuthProvider } from './context/AuthContext.js';
 import { ProtectedPageRoute } from './pages/ProtectedPageRoute.js';
 import { ProductProvider } from './context/ProductContext.js';
 import { PayResult } from './pages/PayResult.jsx';
+import { ShoppyAdmin } from './pages/ShoppyAdmin.jsx';
+
 import { useEffect } from 'react';
 import { createCsrfToken } from './feature/csrf/manageCsrfToken.js';
 
@@ -57,6 +59,7 @@ export default function App() {
                   </ProtectedPageRoute>
                 } />
               </Route>
+              <Route path="/shoppy/admin" element={<ShoppyAdmin />} />
             </Routes>
           </BrowserRouter>
         </CartProvider>

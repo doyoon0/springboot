@@ -5,13 +5,16 @@ const saveAuth = JSON.parse(localStorage.getItem("auth"));
 export const authSlice = createSlice({
   name: 'auth',
   initialState: saveAuth || {
-    isLogin: false
+    isLogin: false,
+    role: ''
   },
   reducers: {
     login(state, action) {
         state.isLogin = !state.isLogin;
-        const { userId } = action.payload;
+        const { userId, role } = action.payload;
         const loginInfo = {"userId": userId};
+        state.role = role;
+
         localStorage.setItem("loginInfo", JSON.stringify(loginInfo)); //여기서 String타입으로 저장하기때문에 API에서 다시 parsing 해야함
 
         //새로고침을 위한 데이터 복사(localStorage 저장)
@@ -19,7 +22,8 @@ export const authSlice = createSlice({
             JSON.stringify({
 //                "isLogin" : isLogin //이름이 같은 경우 한쪽을 생략해도 된다.
                 isLogin: true,
-                userId
+                userId,
+                role
             })
         )
 
