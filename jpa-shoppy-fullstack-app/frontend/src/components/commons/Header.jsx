@@ -70,9 +70,11 @@ export function Header() {
                             <button type="button">Support</button>
                         </Link>
                     }
-                   <Link to="/admin">
-                        <button type="button">Admin</button>
-                   </Link>
+                   { role === "ROLE_ADMIN" &&
+                       <Link to="/admin">
+                            <button type="button">Admin</button>
+                       </Link>
+                   }
                 </nav>
             </div>
         </div>

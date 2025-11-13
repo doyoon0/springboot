@@ -18,6 +18,7 @@ import { ProtectedPageRoute } from './pages/ProtectedPageRoute.js';
 import { ProductProvider } from './context/ProductContext.js';
 import { PayResult } from './pages/PayResult.jsx';
 import { ShoppyAdmin } from './pages/ShoppyAdmin.jsx';
+import { ErrorPage } from './pages/ErrorPage.jsx';
 
 import { useEffect } from 'react';
 import { createCsrfToken } from './feature/csrf/manageCsrfToken.js';
@@ -60,6 +61,7 @@ export default function App() {
                 } />
               </Route>
               <Route path="/shoppy/admin" element={<ShoppyAdmin />} />
+              <Route path="/error/:type" element={<ErrorPage />} />
             </Routes>
           </BrowserRouter>
         </CartProvider>
